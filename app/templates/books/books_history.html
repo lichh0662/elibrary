@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% from 'pagination.html' import pagination %}
+{% block head %}
+{{ super() }}
+<script defer src="{{ url_for('static', filename='delete.js')}}"></script>
+{% endblock %}
+
+{% block content %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                №
+            </th>
+            <th>
+                login
+            </th>
+            <th>
+                Book name
+            </th>
+    </thead>
+    <tbody>
+        {% for bl in books_list %}
+        <tr>
+            <td>
+                {{loop.index}}
+            </td>
+            <td>
+                {{ bl.login }}
+            </td>
+            <td id="Title">
+                {{ bl.title }}
+            </td>
+
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{{ pagination(current_page, last_page, request.endpoint) }}
+
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block content %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                №
+            </th>
+            <th>
+                Cover
+            </th>
+            <th>
+                ФИО
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Year
+            </th>
+            <th>
+                Publisher
+            </th>
+            <th>
+                Author
+            </th>
+            <th>
+                Page_count
+            </th>
+            <th>
+                Genres
+            </th>
+            <th>
+                action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for bw in watch_list %}
+        {% for book in books_list %}
+        {% if bw.title == book.title %}
+        <tr>
+            <td>
+                {{loop.index}}
+            </td>
+            <td>
+                <img class="card-img-top" src="{{ url_for('static', filename = 'img/' + book.filename  ) }}" alt="Card image cap" style = "height:200px">
+            </td>
+            <td id="Title">
+                {{ book.title }}
+            </td>
+
+            <td>
+                {{ book.description }}
+            </td>
+            <td>
+                {{ book.year }}
+            </td>
+            <td>
+                {{ book.publisher }}
+            </td>
+            <td>
+                {{ book.author }}
+            </td>
+            <td>
+                {{ book.page_count }}
+            </td>
+            <td>
+                {% for genre in genres %}
+                {% for bg in bgs %}
+                {% if book.id | string== bg.book_id | string and bg.genre_id | string== genre.id | string %} {{ genre.name }} <br> {% endif %}
+                {% endfor %}
+                {% endfor %}
+            </td>
+            <td>
+                <div class="btn-group" role="group">
+                    {% if current_user.is_authenticated %} 
+                        {% if current_user.can("show", user) %}
+                            <a class="btn btn-secondary" href="{{ url_for('books.show_book', book_id=book.id)}}">See more</a>
+                        {% endif %}
+                        {% if current_user.can("edit", user) %}
+                            <a class="btn btn-primary" href="{{ url_for('books.edit_book', book_id=book.id)}}">Edit</a>
+                        {% endif %}
+                        {% if current_user.can("delete", user) %}
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-title="{{ book.title }}" data-url="{{ url_for('books.delete_book', book_id=book.id)}}"> Delete </button>
+                        {% endif %}
+                    {% endif %}  
+            </td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

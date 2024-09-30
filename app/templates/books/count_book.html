@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% from 'pagination.html' import pagination %}
+{% block head %}
+{{ super() }}
+<script defer src="{{ url_for('static', filename='delete.js')}}"></script>
+{% endblock %}
+
+{% block content %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                №
+            </th>
+            <th>
+                Cover
+            </th>
+            <th>
+                Title
+            </th>
+            <th>
+                Watched
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Author
+            </th>
+            <th>
+                Page_count
+            </th>
+            <th>
+                More
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for bc in top_list %}
+        <tr>
+            <td>
+                {{loop.index}}
+            </td>
+            <td>
+                <img class="card-img-top" src="{{ url_for('static', filename = 'img/' + bc.filename  ) }}" alt="Card image cap" style = "height:200px">
+            </td>
+            <td id="Title">
+                {{ bc.title }}
+            </td>
+
+            <td>
+                {{ bc. count }}
+            </td>
+            <td>
+                {{ bc.description }}
+            </td>
+            <td>
+                {{ bc.author }}
+            </td>
+            <td>
+                {{ bc.page_count }}
+            </td>
+            <td>
+                {% for book in books_list %}
+                    {% if book.cover_id == bc.cover_id %}
+                        <a class="btn btn-secondary" href="{{ url_for('books.show_book', book_id=book.id)}}">Show</a>
+                    {% endif %}
+                {% endfor %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+{% endblock %}
